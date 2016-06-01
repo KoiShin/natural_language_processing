@@ -34,10 +34,17 @@ int main(int argc, char **argv) {
     int found_flg = 0;
     int list_length = 0;
     int words_volume = 0;
+    FILE *output_file;
+    char output_file_name[32] = "";
 
     strcpy(file_name, "../data/001.txt");
+    strcpy(output_file_name, "../data/tf_001.txt");
 
     if ((file = fopen(file_name, "r")) == NULL) {
+        printf("can't open a file");
+        return -1;
+    }
+    if ((output_file = fopen(output_file_name, "w")) == NULL) {
         printf("can't open a file");
         return -1;
     }
@@ -139,7 +146,14 @@ int main(int argc, char **argv) {
     if (words_list != NULL) {
         words_this = words_list;
         while (1) {
-            printf("%s:%d:%f\n", words_this->word, words_this->cnt,  words_this->cnt / (double)words_volume);
+            printf("%s:%d:%f\n",
+                words_this->word,
+                words_this->cnt,
+                words_this->cnt / (double)words_volume);
+            fprintf(output_file, "%s\t%d\t%f\n",
+                words_this->word,
+                words_this->cnt,
+                words_this->cnt / (double)words_volume);
             if (words_this->next_addr == NULL) break;
 
             words_this = words_this->next_addr;
