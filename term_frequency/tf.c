@@ -26,8 +26,11 @@ int main(int argc, char **argv) {
     char *string;
     char ch;
     char *word;
-    struct WordStruct *words_list, *word_this, *word_new;
+    struct WordStruct *words_list = NULL;
+    struct WordStruct *words_this;
+    struct WordStruct *words_new = NULL;
     int found_flg = 0;
+    int list_length = 0;
 
     strcpy(file_name, "../data/001.txt");
 
@@ -54,44 +57,54 @@ int main(int argc, char **argv) {
     // Gets node object
     node = mecab_sparse_tonode(mecab, string);
     CHECK(node);
-    words_list = NULL;
     for (; node; node = node->next) {
         if (node->stat == MECAB_NOR_NODE || node->stat == MECAB_UNK_NODE) {
-            fwrite(node->surface, sizeof(char), node->length, stdout);
-            printf("\t%s\n", node->feature);
+            // fwrite(node->surface, sizeof(char), node->length, stdout);
+            // printf("\t%s\n", node->feature);
 
             word = (char *)malloc(sizeof(char) * (node->length + 1));
             strncpy(word, node->surface, node->length);
             word[node->length] = '\0';
-        }
 
-        word_this = words_list;
-        while (1) {
-            if (word_this == NULL) break;
-            if (strcmp(word_this->word, word) == 0) {
-                found_flg = 1;
-                free(word);
-                break;
+            found_flg = 0;
+            words_this = words_list;
+            while (1) {
+                if (words_this == NULL) break;
+                if (strcmp(words_this->word, word) == 0) {
+                    found_flg = 1;
+                    free(word);
+                    break;
+                }
+                if (words_this->next_addr == NULL) break;
+
+                words_this = words_this->next_addr;
             }
-            if (word_this->next_addr == NULL) break;
-
-            word_this = word_this->next_addr;
 
             if (found_flg) {
-                word_this->cnt++;
-                free(word);
+                words_this->cnt++;
                 continue;
             }
 
-            word_new = malloc(sizeof(struct WordStruct));
-            word_new->word = word;
-            word_new->cnt = 1;
-            word_new->next_addr = NULL;
+            words_new = malloc(sizeof(struct WordStruct));
+            words_new->word = word;
+            words_new->cnt = 1;
+            words_new->next_addr = NULL;
             if (words_list == NULL) {
-                words_list = word_new;
+                words_list = words_new;
             } else {
-                word_this->next_addr = word_new;
+                words_this->next_addr = words_new;
             }
+        }
+    }
+
+    if (words_list->word != NULL) {
+        words_this = words_list;
+        while (1) {
+            printf("%s:%d\n", words_this->word, words_this->cnt);
+            list_length++;
+            if (words_this->next_addr == NULL) break;
+
+            words_this = words_this->next_addr;
         }
     }
 
