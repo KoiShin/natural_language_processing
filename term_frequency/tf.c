@@ -29,6 +29,8 @@ int main(int argc, char **argv) {
     struct WordStruct *words_list = NULL;
     struct WordStruct *words_this;
     struct WordStruct *words_new = NULL;
+    struct WordStruct *words_tmp;
+    struct WordStruct *words_pre;
     int found_flg = 0;
     int list_length = 0;
 
@@ -104,6 +106,30 @@ int main(int argc, char **argv) {
             list_length++;
             if (words_this->next_addr == NULL) break;
 
+            words_this = words_this->next_addr;
+        }
+    }
+
+    for (i = 0; i < list_length; i++) {
+        if (words_list == NULL) break;
+
+        words_this = words_list;
+        words_pre = NULL;
+
+        while (1) {
+            if (words_this->next_addr == NULL) break;
+            if (words_this->cnt < words_this->next_addr->cnt) {
+                words_tmp = words_this;
+                words_this = words_tmp->next_addr;
+                words_tmp->next_addr = words_this->next_addr;
+                words_this->next_addr = words_tmp;
+                if (words_pre == NULL) {
+                    words_list = words_this;
+                } else {
+                    words_pre->next_addr = words_this;
+                }
+            }
+            words_pre = words_this;
             words_this = words_this->next_addr;
         }
     }
