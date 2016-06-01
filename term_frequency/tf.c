@@ -160,6 +160,14 @@ int main(int argc, char **argv) {
         }
     }
 
+    words_this = words_list;
+    while (words_this != NULL) {
+        struct WordStruct tmp = *words_this;
+        free(words_this->word);
+        free(words_this);
+        words_this = tmp.next_addr;
+    }
+
     mecab_destroy(mecab);
 
     return 0;
