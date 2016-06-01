@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
     struct WordStruct *words_pre;
     int found_flg = 0;
     int list_length = 0;
+    int words_volume = 0;
 
     strcpy(file_name, "../data/001.txt");
 
@@ -102,8 +103,9 @@ int main(int argc, char **argv) {
     if (words_list->word != NULL) {
         words_this = words_list;
         while (1) {
-            printf("%s:%d\n", words_this->word, words_this->cnt);
+            // printf("%s:%d\n", words_this->word, words_this->cnt);
             list_length++;
+            words_volume += words_this->cnt;
             if (words_this->next_addr == NULL) break;
 
             words_this = words_this->next_addr;
@@ -130,6 +132,16 @@ int main(int argc, char **argv) {
                 }
             }
             words_pre = words_this;
+            words_this = words_this->next_addr;
+        }
+    }
+
+    if (words_list != NULL) {
+        words_this = words_list;
+        while (1) {
+            printf("%s:%d:%f\n", words_this->word, words_this->cnt,  words_this->cnt / (double)words_volume);
+            if (words_this->next_addr == NULL) break;
+
             words_this = words_this->next_addr;
         }
     }
