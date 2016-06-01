@@ -10,11 +10,11 @@
         return -1; \
     }
 
-struct WordStruct {
+typedef struct word_struct {
     char *word;
     int cnt;
-    struct WordStruct *next_addr;
-};
+    struct word_struct *next_addr;
+} Word;
 
 int main(int argc, char **argv) {
     mecab_t *mecab;
@@ -26,11 +26,11 @@ int main(int argc, char **argv) {
     char *string;
     char ch;
     char *word;
-    struct WordStruct *words_list = NULL;
-    struct WordStruct *words_this;
-    struct WordStruct *words_new = NULL;
-    struct WordStruct *words_tmp;
-    struct WordStruct *words_pre;
+    Word *words_list = NULL;
+    Word *words_this;
+    Word *words_new = NULL;
+    Word *words_tmp;
+    Word *words_pre;
     int found_flg = 0;
     int list_length = 0;
     int words_volume = 0;
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
                 continue;
             }
 
-            words_new = malloc(sizeof(struct WordStruct));
+            words_new = malloc(sizeof(Word));
             words_new->word = word;
             words_new->cnt = 1;
             words_new->next_addr = NULL;
@@ -162,7 +162,7 @@ int main(int argc, char **argv) {
 
     words_this = words_list;
     while (words_this != NULL) {
-        struct WordStruct tmp = *words_this;
+        Word tmp = *words_this;
         free(words_this->word);
         free(words_this);
         words_this = tmp.next_addr;
