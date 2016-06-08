@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         int i;
 
         sprintf(file_name, "../data/%03d.txt", file_num);
-        sprintf(output_file_name, "tf_result/tf_%03d.txt", file_num);
+        sprintf(output_file_name, "../tf_result/tf_%03d.txt", file_num);
 
         if ((file = fopen(file_name, "r")) == NULL) {
             printf("can't open a file");
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 
         fseek(file, 0, SEEK_END);
         file_size = ftell(file);
-        printf("%sファイルのサイズ:%dバイト\n", file_name, file_size);
+        // printf("%sファイルのサイズ:%dバイト\n", file_name, file_size);
         fseek(file, 0, SEEK_SET);
 
         string = (char *)malloc(sizeof(char) * (file_size + 1));
@@ -152,10 +152,10 @@ int main(int argc, char **argv) {
         if (words_list != NULL) {
             words_this = words_list;
             while (1) {
-                printf("%s:%d:%f\n",
-                    words_this->word,
-                    words_this->cnt,
-                    words_this->cnt / (double)words_volume);
+                // printf("%s:%d:%f\n",
+                //     words_this->word,
+                //     words_this->cnt,
+                //     words_this->cnt / (double)words_volume);
                 fprintf(output_file, "%s\t%d\t%f\n",
                     words_this->word,
                     words_this->cnt,
