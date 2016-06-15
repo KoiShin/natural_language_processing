@@ -75,6 +75,7 @@ int main(int argc, char **argv) {
         CHECK(node);
         for (; node; node = node->next) {
             if (node->stat == MECAB_NOR_NODE || node->stat == MECAB_UNK_NODE) {
+                if (node->posid != 10 && node->posid != 31 && (node->posid <= 37 || node->posid >= 49)) continue;
                 // fwrite(node->surface, sizeof(char), node->length, stdout);
                 // printf("\t%s\n", node->feature);
 
